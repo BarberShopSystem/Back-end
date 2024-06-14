@@ -11,37 +11,44 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import br.com.uniamerica.agendaja.agendaja_api.entity.Administrador;
-import br.com.uniamerica.agendaja.agendaja_api.repository.AdministradorRepository;
-import br.com.uniamerica.agendaja.agendaja_api.service.AdministradorService;
+import br.com.uniamerica.agendaja.agendaja_api.entity.Barbearia;
+import br.com.uniamerica.agendaja.agendaja_api.repository.BarbeariaRepository;
+import br.com.uniamerica.agendaja.agendaja_api.service.BarbeariaService;
 
 @Controller
-@RequestMapping("/api/administradores")
-public class AdministradorController {
+@RequestMapping("/api/barbearias")
+public class BarbeariaController {
 
     @Autowired
-    public AdministradorRepository administradorRepository;
+    private BarbeariaRepository barbeariaRepository;
 
     @Autowired
-    public AdministradorService administradorService;
+    private BarbeariaService barbeariaService;
 
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody final Administrador administrador) {
-        this.administradorRepository.save(administrador);
+    public ResponseEntity<?> cadastrar(@RequestBody final Barbearia barbearia) {
+        this.barbeariaRepository.save(barbearia);
         return ResponseEntity.ok().body("Registro cadastrado com sucesso");
     }
 
     @GetMapping
     public ResponseEntity<?> findAll() {
-        return ResponseEntity.ok().body(this.administradorRepository.findByAdministradoresAtivos());
+        return ResponseEntity.ok().body(this.barbeariaRepository.findByBarbeariasAtivas());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Barbearia> findById(
+            @PathVariable final Long id
+    ) {
+        return ResponseEntity.ok().body(this.barbeariaService.findById(id));
     }
 
     @PutMapping("/atualizarGeral/{id}")
     public ResponseEntity<?> atualizar(
             @PathVariable final Long id,
-            @RequestBody Administrador administrador) {
+            @RequestBody Barbearia barbearia) {
         try {
-            this.administradorService.atualizarGeral(id, administrador);
+            this.barbeariaService.atualizarGeral(id, barbearia);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -49,10 +56,9 @@ public class AdministradorController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> excluir(
-            @PathVariable final Long id) {
+    public ResponseEntity<?> excluir(@PathVariable final Long id) {
         try {
-            this.administradorService.deletarGeral(id);
+            this.barbeariaService.deletarGeral(id);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

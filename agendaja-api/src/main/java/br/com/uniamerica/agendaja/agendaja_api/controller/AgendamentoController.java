@@ -11,37 +11,37 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import br.com.uniamerica.agendaja.agendaja_api.entity.Administrador;
-import br.com.uniamerica.agendaja.agendaja_api.repository.AdministradorRepository;
-import br.com.uniamerica.agendaja.agendaja_api.service.AdministradorService;
+import br.com.uniamerica.agendaja.agendaja_api.entity.Agendamento;
+import br.com.uniamerica.agendaja.agendaja_api.repository.AgendamentoRepository;
+import br.com.uniamerica.agendaja.agendaja_api.service.AgendamentoService;
 
 @Controller
-@RequestMapping("/api/administradores")
-public class AdministradorController {
+@RequestMapping("/api/agendamentos")
+public class AgendamentoController {
 
     @Autowired
-    public AdministradorRepository administradorRepository;
+    private AgendamentoRepository agendamentoRepository;
 
     @Autowired
-    public AdministradorService administradorService;
+    private AgendamentoService agendamentoService;
 
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody final Administrador administrador) {
-        this.administradorRepository.save(administrador);
+    public ResponseEntity<?> cadastrar(@RequestBody final Agendamento agendamento) {
+        this.agendamentoRepository.save(agendamento);
         return ResponseEntity.ok().body("Registro cadastrado com sucesso");
     }
 
     @GetMapping
     public ResponseEntity<?> findAll() {
-        return ResponseEntity.ok().body(this.administradorRepository.findByAdministradoresAtivos());
+        return ResponseEntity.ok().body(this.agendamentoRepository.findByAgendamentosAtivos());
     }
 
     @PutMapping("/atualizarGeral/{id}")
     public ResponseEntity<?> atualizar(
             @PathVariable final Long id,
-            @RequestBody Administrador administrador) {
+            @RequestBody Agendamento agendamento) {
         try {
-            this.administradorService.atualizarGeral(id, administrador);
+            this.agendamentoService.atualizarGeral(id, agendamento);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -49,10 +49,9 @@ public class AdministradorController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> excluir(
-            @PathVariable final Long id) {
+    public ResponseEntity<?> excluir(@PathVariable final Long id) {
         try {
-            this.administradorService.deletarGeral(id);
+            this.agendamentoService.deletarGeral(id);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

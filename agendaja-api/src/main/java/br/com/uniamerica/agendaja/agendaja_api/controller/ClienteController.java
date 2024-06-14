@@ -11,37 +11,37 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import br.com.uniamerica.agendaja.agendaja_api.entity.Administrador;
-import br.com.uniamerica.agendaja.agendaja_api.repository.AdministradorRepository;
-import br.com.uniamerica.agendaja.agendaja_api.service.AdministradorService;
+import br.com.uniamerica.agendaja.agendaja_api.entity.Cliente;
+import br.com.uniamerica.agendaja.agendaja_api.repository.ClienteRepository;
+import br.com.uniamerica.agendaja.agendaja_api.service.ClienteService;
 
 @Controller
-@RequestMapping("/api/administradores")
-public class AdministradorController {
+@RequestMapping("/api/clientes")
+public class ClienteController {
 
     @Autowired
-    public AdministradorRepository administradorRepository;
+    private ClienteRepository clienteRepository;
 
     @Autowired
-    public AdministradorService administradorService;
+    private ClienteService clienteService;
 
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody final Administrador administrador) {
-        this.administradorRepository.save(administrador);
+    public ResponseEntity<?> cadastrar(@RequestBody final Cliente cliente) {
+        this.clienteRepository.save(cliente);
         return ResponseEntity.ok().body("Registro cadastrado com sucesso");
     }
 
     @GetMapping
     public ResponseEntity<?> findAll() {
-        return ResponseEntity.ok().body(this.administradorRepository.findByAdministradoresAtivos());
+        return ResponseEntity.ok().body(this.clienteRepository.findByClientesAtivos());
     }
 
     @PutMapping("/atualizarGeral/{id}")
     public ResponseEntity<?> atualizar(
             @PathVariable final Long id,
-            @RequestBody Administrador administrador) {
+            @RequestBody Cliente cliente) {
         try {
-            this.administradorService.atualizarGeral(id, administrador);
+            this.clienteService.atualizarGeral(id, cliente);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -49,10 +49,9 @@ public class AdministradorController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> excluir(
-            @PathVariable final Long id) {
+    public ResponseEntity<?> excluir(@PathVariable final Long id) {
         try {
-            this.administradorService.deletarGeral(id);
+            this.clienteService.deletarGeral(id);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
